@@ -10,23 +10,15 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -41,11 +33,9 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION};
     int PERMISSION_ALL = 1;
-    private static int c=0;
     private WifiManager mainWifi;
     private WifiReceiver receiverWifi;
     WifiAdapter adapter;
-    ListView lvWifiDetails;
     ArrayList<Wifi> wifiList ;
     List<ScanResult> resList;
 
@@ -62,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
         receiverWifi = new WifiReceiver();
         registerReceiver(receiverWifi, new IntentFilter(
                 WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-        //scanWifiList();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -81,14 +70,30 @@ public class MainActivity extends AppCompatActivity {
             if(!hasPermissions(this, PERMISSIONS)){
                 ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
             }
-            proceedAfterPermission();
+            if(hasPermissions(this,PERMISSIONS))
+                proceedAfterPermission();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode==PERMISSION_ALL) {
+            int c=0;
+            for(int i=0;i<grantResults.length;i++) {
+                if(grantResults[i]==PackageManager.PERMISSION_GRANTED)
+                    c++;
+            }
+            Log.v("grant",""+c);
+            if(c==5)
+                proceedAfterPermission();
+        }
     }
 
     public static boolean hasPermissions(Context context, String... permissions) {
         if (context != null && permissions != null) {
             for (String permission : permissions) {
+                Log.v("permis",permission);
                 if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                     return false;
                 }
