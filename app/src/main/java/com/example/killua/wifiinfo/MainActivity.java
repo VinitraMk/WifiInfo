@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.support.annotation.NonNull;
@@ -128,8 +129,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void proceedAfterPermission() {
-        Toast.makeText(getBaseContext(), "We got All Permissions", Toast.LENGTH_LONG).show();
-        scanWifiList();
+        //Toast.makeText(getBaseContext(), "We got All Permissions", Toast.LENGTH_LONG).show();
+        final LocationManager manager = (LocationManager)getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        Log.v("enab",""+manager.isProviderEnabled(LocationManager.GPS_PROVIDER));
+        if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+            Toast.makeText(this,"GPS is disabled. Please turn it on",Toast.LENGTH_SHORT).show();
+        else
+            scanWifiList();
     }
 
     class WifiReceiver extends BroadcastReceiver {
