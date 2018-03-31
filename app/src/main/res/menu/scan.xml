@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.toolbar.MainActivity">
+    <item
+        android:id="@+id/scan_button"
+        android:title="Scan"
+        android:icon="@mipmap/ic_perm_scan_wifi_white_24dp"
+        android:orderInCategory="0"
+        app:showAsAction="always"/>
+</menu>
