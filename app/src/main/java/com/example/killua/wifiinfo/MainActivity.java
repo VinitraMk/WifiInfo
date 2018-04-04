@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -134,8 +135,20 @@ public class MainActivity extends AppCompatActivity {
         Log.v("enab",""+manager.isProviderEnabled(LocationManager.GPS_PROVIDER));
         if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
             Toast.makeText(this,"GPS is disabled. Please turn it on",Toast.LENGTH_SHORT).show();
-        else
-            scanWifiList();
+        else {
+            new CountDownTimer(3600000, 3000) {
+
+                public void onTick(long millisUntilFinished) {
+                    Log.v("seconds remaining: ","" + millisUntilFinished / 1000);
+                    Toast.makeText(getApplicationContext(),"Scanning..",Toast.LENGTH_SHORT).show();
+                    scanWifiList();
+                }
+
+                public void onFinish() {
+                    Log.v("done!","done");
+                }
+            }.start();
+        }
     }
 
     class WifiReceiver extends BroadcastReceiver {
