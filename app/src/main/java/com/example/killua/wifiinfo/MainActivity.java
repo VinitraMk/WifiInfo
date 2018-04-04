@@ -140,8 +140,12 @@ public class MainActivity extends AppCompatActivity {
 
                 public void onTick(long millisUntilFinished) {
                     Log.v("seconds remaining: ","" + millisUntilFinished / 1000);
-                    Toast.makeText(getApplicationContext(),"Scanning..",Toast.LENGTH_SHORT).show();
-                    scanWifiList();
+                    if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+                        Toast.makeText(getApplicationContext(),"GPS is disabled. Please turn it on",Toast.LENGTH_SHORT).show();
+                    else {
+                        Toast.makeText(getApplicationContext(), "Scanning..", Toast.LENGTH_SHORT).show();
+                        scanWifiList();
+                    }
                 }
 
                 public void onFinish() {
